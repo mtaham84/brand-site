@@ -1,0 +1,174 @@
+{% extends 'brands/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% if LANG == 'fa' %}{{ brand.name_fa }}{% else %}{{ brand.name_en }}{% endif %} | BrandCenter{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* هدر برند با بنر */
+    .brand-page-header {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 12px 30px rgba(26,35,126,0.2);
+    }
+    .brand-banner {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        display: block;
+        filter: brightness(0.7);
+    }
+    .brand-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 30px;
+        background: linear-gradient(to top, rgba(26,35,126,0.9), transparent);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    [dir="rtl"] .brand-overlay {
+        text-align: right;
+    }
+    .brand-overlay h1 {
+        font-size: 2.2rem;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .brand-overlay p {
+        font-size: 1rem;
+        opacity: 0.9;
+        max-width: 600px;
+    }
+
+    /* شبکه محصولات */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+        padding: 0 20px;
+    }
+
+    /* کارت پیشرفته */
+    .product-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+    }
+    .product-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 35px rgba(123,31,162,0.15);
+    }
+    .product-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.4s;
+    }
+    .product-card:hover img {
+        transform: scale(1.05);
+    }
+    .card-info {
+        padding: 16px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .card-info .product-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--indigo-deep);
+        margin-bottom: 6px;
+    }
+    .rating {
+        color: #f4b400;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    .rating .star-empty { color: #ddd; }
+    .description {
+        font-size: 0.9rem;
+        color: #555;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* badge برای برند (اختیاری) */
+    .brand-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--purple-light);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        z-index: 2;
+    }
+    [dir="rtl"] .brand-badge {
+        right: auto;
+        left: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="brand-page-header">
+        {% if brand.banner %}
+            <img src="{{ brand.banner.url }}" alt="{{ brand.name_en }}" class="brand-banner">
+        {% else %}
+            <div style="height:320px; background: linear-gradient(135deg, var(--indigo), var(--purple));"></div>
+        {% endif %}
+        <div class="brand-overlay">
+            <h1 class="typewriter">{% if LANG == 'fa' %}{{ brand.name_fa }}{% else %}{{ brand.name_en }}{% endif %}</h1>
+            <p class="typewriter">{% if LANG == 'fa' %}{{ brand.description_fa }}{% else %}{{ brand.description_en }}{% endif %}</p>
+        </div>
+    </div>
+
+    <section class="product-grid">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.id %}" class="product-card">
+            <img src="{{ product.image.url }}" alt="{{ product.name_en }}">
+            <div class="card-info">
+                <div>
+                    <div class="product-name">{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}</div>
+                   <div class="rating">
+    {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
+    {% for i in "12345" %}
+        {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
+    {% endfor %}
+    {% endwith %}
+    <span class="rate-value">{{ product.rate }}</span>
+</div>
+                </div>
+                <div class="description">
+                    {% if LANG == 'fa' %}{{ product.description_fa|truncatechars:80 }}{% else %}{{ product.description_en|truncatechars:80 }}{% endif %}
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p>{% trans "No products in this brand yet." %}</p>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

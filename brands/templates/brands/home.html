@@ -1,0 +1,187 @@
+{% extends 'brands/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Home" %} | BrandCenter{% endblock %}
+
+{% block content %}
+{# ================== تمام بخش‌های بالای صفحه داخل container-fluid (محدود به ۱۳۲۰px) ================== #}
+<div class="container-fluid">
+
+    <!-- بنر اصلی -->
+
+    {% if top_banners %}
+<section class="banner-slider">
+    <div class="slides-container">
+        {% for banner in top_banners %}
+        <div class="slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+            {% if banner.link %}
+            <a href="{{ banner.link }}" class="banner-link"></a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <button class="slider-btn prev" aria-label="قبلی">&#10094;</button>
+    <button class="slider-btn next" aria-label="بعدی">&#10095;</button>
+    <div class="dots-container">
+        {% for banner in top_banners %}
+        <span class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+    <!-- نوار پرفروش‌ترین‌ها -->
+    <section class="product-strip">
+        <div class="strip-header">
+            <h2>{% trans "Best Sellers" %}</h2>
+            <a href="{% url 'best_sellers' %}" class="show-more">{% trans "Show More" %}</a>
+        </div>
+        <div class="strip-wrapper">
+            <button class="scroll-btn scroll-btn-left" aria-label="Scroll left"></button>
+            <div class="strip-container">
+                {% for product in best_sellers %}
+                <a href="{% url 'product_detail' product.id %}" class="card">
+                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}">
+                    <div class="card-body">
+                        <div class="product-name">
+                            {% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}
+                        </div>
+                        <div class="rate">
+                            {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                            <span class="rate-value">{{ product.rate }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <p>{% trans "No best sellers yet." %}</p>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn scroll-btn-right" aria-label="Scroll right"></button>
+        </div>
+    </section>
+
+    <!-- نوارهای هر برند -->
+    {% for brand, products in brand_products.items %}
+    <section class="product-strip">
+        <div class="strip-header">
+            <h2>{% if LANG == 'fa' %}{{ brand.name_fa }}{% else %}{{ brand.name_en }}{% endif %}</h2>
+            <a href="{% url 'brand_detail' brand.id %}" class="show-more">{% trans "Show More" %}</a>
+        </div>
+        <div class="strip-wrapper">
+            <button class="scroll-btn scroll-btn-left" aria-label="Scroll left"></button>
+            <div class="strip-container">
+                {% for product in products %}
+                <a href="{% url 'product_detail' product.id %}" class="card">
+                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}">
+                    <div class="card-body">
+                        <div class="product-name">
+                            {% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}
+                        </div>
+                        <div class="rate">
+                            {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                            <span class="rate-value">{{ product.rate }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <p>{% trans "No products available for this brand." %}</p>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn scroll-btn-right" aria-label="Scroll right"></button>
+        </div>
+    </section>
+    {% endfor %}
+
+    <!-- بنر دوم -->
+ {% if bottom_banners %}
+<section class="banner-slider secondary-banner">
+    <div class="slides-container">
+        {% for banner in bottom_banners %}
+        <div class="slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+            {% if banner.link %}
+            <a href="{{ banner.link }}" class="banner-link"></a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <button class="slider-btn prev" aria-label="قبلی">&#10094;</button>
+    <button class="slider-btn next" aria-label="بعدی">&#10095;</button>
+    <div class="dots-container">
+        {% for banner in bottom_banners %}
+        <span class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></span>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+    <!-- نوار اسلایدرهای Before/After -->
+    {% if before_after_list %}
+    <section class="ba-strip">
+        <div class="strip-header">
+            <h2>{% trans "Results" %}</h2>
+        </div>
+        <div class="strip-wrapper">
+            <button class="scroll-btn scroll-btn-left" aria-label="Scroll left"></button>
+            <div class="strip-container">
+                {% for ba in before_after_list %}
+                <div class="ba-card">
+                    <div class="ba-slider">
+                        <img src="{{ ba.image_before.url }}" alt="Before" class="ba-before">
+                        <img src="{{ ba.image_after.url }}" alt="After" class="ba-after">
+                        <span class="ba-label ba-label-before">{% trans "Before" %}</span>
+                        <span class="ba-label ba-label-after">{% trans "After" %}</span>
+                        <div class="ba-handle"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn scroll-btn-right" aria-label="Scroll right"></button>
+        </div>
+    </section>
+    {% endif %}
+
+</div> {# پایان container-fluid اصلی #}
+
+{# ================== بخش گیف‌های تبلیغاتی: تمام عرض ================== #}
+{% if promo_gifs %}
+<section class="promo-section">
+    <div class="container-fluid">
+        <div class="promo-header">
+            <h2>{% trans "Promotions" %}</h2>
+        </div>
+        <div class="strip-wrapper">
+            <button class="scroll-btn scroll-btn-left" aria-label="Scroll left"></button>
+            <div class="strip-container">
+                {% for media in promo_gifs %}
+                    <div class="promo-card">
+                        {% if media.video %}
+                            <video autoplay loop muted playsinline>
+                                <source src="{{ media.video.url }}" type="video/mp4">
+                            </video>
+                        {% elif media.image %}
+                            <img src="{{ media.image.url }}" alt="{{ media.title }}">
+                        {% endif %}
+                        {% if media.link %}
+                            <a href="{{ media.link }}" target="_blank" class="promo-link"></a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn scroll-btn-right" aria-label="Scroll right"></button>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

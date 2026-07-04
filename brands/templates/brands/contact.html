@@ -1,0 +1,28 @@
+{% extends 'brands/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Contact Us" %} | BrandCenter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="contact-page">
+        <h1 class="page-title">{% trans "Contact Us" %}</h1>
+        <div class="contact-card">
+            <div class="contact-item">
+                <span class="contact-label">📞 {% trans "Phone" %}:</span>
+                <span class="contact-value">{{ phone }}</span>
+            </div>
+            <div class="contact-item">
+    <span class="contact-label">📍 {% trans "Address" %}:</span>
+    <span class="contact-value">
+        {% if LANG == 'fa' %}{{ address_fa }}{% else %}{{ address_en }}{% endif %}
+    </span>
+</div>
+            <div class="contact-item">
+                <span class="contact-label">✉️ {% trans "Email" %}:</span>
+                <a href="mailto:{{ email }}" class="contact-value email-link">{{ email }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

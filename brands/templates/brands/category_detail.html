@@ -1,0 +1,74 @@
+{% extends 'brands/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% if LANG == 'fa' %}{{ category.name_fa }}{% else %}{{ category.name_en }}{% endif %} | BrandCenter{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-header {
+        background: var(--gradient-full);
+        background-size: 300% 300%;
+        animation: gradientFlow 12s ease-in-out infinite;
+        color: #fff;
+        padding: 40px 28px;
+        border-radius: var(--radius-lg);
+        margin-bottom: 34px;
+        text-align: center;
+        box-shadow: var(--shadow);
+    }
+    .category-header h1 {
+        font-size: 1.9rem;
+        font-weight: 800;
+        margin: 0;
+    }
+    .category-header p {
+        opacity: 0.95;
+        margin-top: 8px;
+    }
+
+    /* استفاده از استایل کارت‌های محصول مشترک در base.html */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 22px;
+        padding: 0 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- فقط یک هدر با افکت تایپ‌رایتر -->
+    <div class="category-header">
+        <h1 class="typewriter">{% if LANG == 'fa' %}{{ category.name_fa }}{% else %}{{ category.name_en }}{% endif %}</h1>
+        <p class="typewriter">{% blocktrans with brand=category.brand.name_en %}Part of {{ brand }} collection{% endblocktrans %}</p>
+    </div>
+
+    <section class="product-grid">
+        {% for product in products %}
+        <a href="{% url 'product_detail' product.id %}" class="product-card">
+            <img src="{{ product.image.url }}" alt="{{ product.name_en }}">
+            <div class="card-info">
+                <div class="product-name">{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}</div>
+                <div class="rating">
+                    {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                    <span class="rate-value">{{ product.rate }}</span>
+                </div>
+                <div class="description">
+                    {% if LANG == 'fa' %}{{ product.description_fa|truncatechars:80 }}{% else %}{{ product.description_en|truncatechars:80 }}{% endif %}
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p>{% trans "No products in this category." %}</p>
+        {% endfor %}
+    </section>
+
+</div>
+{% endblock %}

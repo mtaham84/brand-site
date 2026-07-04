@@ -1,0 +1,76 @@
+{% extends 'brands/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Catalogs" %} | BrandCenter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- ========== لیست کاتالوگ‌ها ========== -->
+    <h1 class="page-title">{% trans "Catalogs" %}</h1>
+   <div class="catalog-grid">
+    {% for pdf in pdfs %}
+        <div class="catalog-card">
+            <a href="{% url 'catalog_download' pdf.id %}"download class="catalog-link">
+                {% if pdf.cover_image %}
+                    <img src="{{ pdf.cover_image.url }}" alt="{{ pdf.title }}" class="catalog-cover">
+                {% else %}
+                    <div class="catalog-placeholder">
+                        <span>PDF</span>
+                    </div>
+                {% endif %}
+                <div class="catalog-overlay">
+                    <span class="catalog-title">{{ pdf.title|default:pdf.pdf_file.name }}</span>
+                    <span class="catalog-download">{% trans "Download" %}</span>
+                </div>
+            </a>
+        </div>
+    {% empty %}
+        <p style="color: var(--text-soft); text-align: center; grid-column: 1 / -1;">
+            {% trans "No catalogs available." %}
+        </p>
+    {% endfor %}
+</div>
+
+    <!-- ========== فرم Contact You ========== -->
+    <div class="contact-page" style="margin-top: 60px;">
+        <h2 class="page-title" style="font-size: 1.6rem;">{% trans "Contact You" %}</h2>
+        {% if success %}
+            <div class="glass" style="padding: 30px; border-radius: var(--radius-lg); text-align: center; margin-top: 20px;">
+                <p style="color: var(--deep-purple); font-weight: 600;">{% trans "Your request has been submitted. We will contact you soon." %}</p>
+            </div>
+        {% else %}
+            <form method="post" class="glass" style="padding: 30px; border-radius: var(--radius-lg); margin-top: 20px;">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="form-errors" style="color: var(--peach); margin-bottom: 16px; font-weight: 600;">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <p>⚠ {{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="id_name" style="color: var(--deep-purple); font-weight: 600;">{% trans "Name" %} ({% trans "optional" %})</label>
+                    <input type="text" name="name" id="id_name" value="{{ form.name.value|default_if_none:'' }}" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-family: var(--font); font-size: 0.95rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="id_phone" style="color: var(--deep-purple); font-weight: 600;">{% trans "Phone" %}</label>
+                    <input type="text" name="phone" id="id_phone" value="{{ form.phone.value|default_if_none:'' }}" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-family: var(--font); font-size: 0.95rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="id_email" style="color: var(--deep-purple); font-weight: 600;">{% trans "Email" %}</label>
+                    <input type="email" name="email" id="id_email" value="{{ form.email.value|default_if_none:'' }}" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-family: var(--font); font-size: 0.95rem;">
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="id_message" style="color: var(--deep-purple); font-weight: 600;">{% trans "Message" %} ({% trans "optional" %})</label>
+                    <textarea name="message" id="id_message" rows="3" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-family: var(--font); font-size: 0.95rem;">{{ form.message.value|default_if_none:'' }}</textarea>
+                </div>
+                <button type="submit" class="show-more">{% trans "Send" %}</button>
+            </form>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
