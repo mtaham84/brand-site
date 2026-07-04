@@ -1,0 +1,19 @@
+# Django
+db.sqlite3
+*.log
+*.pot
+*.pyc
+__pycache__/
+mediafiles/
+staticfiles/
+
+# محیط مجازی
+venv/
+env/
+
+# فایل‌های سیستمی
+.DS_Store
+Thumbs.db
+
+# فایل .env (حاوی اطلاعات حساس)
+.env
