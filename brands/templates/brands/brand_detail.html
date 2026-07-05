@@ -6,18 +6,29 @@
 
 {% block content %}
 <div class="container-fluid">
+    <!-- ===== هدر برند (فقط نام برند، بدون توضیحات) ===== -->
     <div class="brand-page-header">
         {% if brand.banner %}
-            <img src="{{ brand.banner.url }}" alt="{{ brand.name_en }}" class="brand-banner">
+            <img src="{{ brand.banner.url }}" alt="{{ brand.name_en }}" class="brand-banner" loading="lazy" decoding="async">
         {% else %}
             <div style="height:320px; background: var(--gradient-brand);"></div>
         {% endif %}
         <div class="brand-overlay">
             <h1 class="typewriter">{% if LANG == 'fa' %}{{ brand.name_fa }}{% else %}{{ brand.name_en }}{% endif %}</h1>
-            <p class="typewriter">{% if LANG == 'fa' %}{{ brand.description_fa }}{% else %}{{ brand.description_en }}{% endif %}</p>
+            <!-- توضیحات از اینجا حذف شد -->
         </div>
     </div>
 
+    <!-- ===== باکس توضیحات برند (زیر بنر) ===== -->
+    <div class="brand-description-wrapper reveal-on-scroll">
+        <div class="brand-description-box">
+            <p class="typewriter brand-desc-text">
+                {% if LANG == 'fa' %}{{ brand.description_fa }}{% else %}{{ brand.description_en }}{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== لیست محصولات ===== -->
     <section class="product-grid">
         {% for product in products %}
         <a href="{% url 'product_detail' product.id %}" class="product-card">
@@ -25,14 +36,14 @@
             <div class="card-info">
                 <div>
                     <div class="product-name">{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}</div>
-                   <div class="rating">
-    {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
-    {% for i in "12345" %}
-        {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
-    {% endfor %}
-    {% endwith %}
-    <span class="rate-value">{{ product.rate }}</span>
-</div>
+                    <div class="rating">
+                        {% with rate_int=product.rate|floatformat:"0"|add:"0" %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        <span class="rate-value">{{ product.rate }}</span>
+                    </div>
                 </div>
                 <div class="description">
                     {% if LANG == 'fa' %}{{ product.description_fa|truncatechars:80 }}{% else %}{{ product.description_en|truncatechars:80 }}{% endif %}
