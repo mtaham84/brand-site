@@ -1,9 +1,8 @@
-from .models import Brand
+from django.core.cache import cache
 
 def header_brands(request):
-    brands = Brand.objects.prefetch_related('categories').all()
+    brands = cache.get('menu_brands')
+    if not brands:
+        brands = Brand.objects.prefetch_related('categories').all()
+        cache.set('menu_brands', brands, 60 * 10)
     return {'menu_brands': brands}
-
-def language_processor(request):
-    # زبان جاری را به قالب ارسال می‌کنیم (en یا fa)
-    return {'LANG': request.LANGUAGE_CODE[:2]}  # 'en' یا 'fa'
