@@ -1760,13 +1760,18 @@
         });
 
         // ===== Mega menu toggle on mobile =====
-        const megaTrigger = document.getElementById('megaTrigger');
-        if (window.innerWidth <= 900) {
-            megaTrigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                this.classList.toggle('active');
-            });
-        }
+        // ===== Mega menu toggle on mobile (fixed) =====
+const megaTrigger = document.getElementById('megaTrigger');
+if (window.innerWidth <= 900) {
+    // فقط روی لینک اصلی که href="#" دارد کلیک کنیم
+    const brandLink = megaTrigger.querySelector('a[href="#"]');
+    if (brandLink) {
+        brandLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            megaTrigger.classList.toggle('active');
+        });
+    }
+}
 
         // ===== Language switcher =====
         const langBtn = document.getElementById('langBtn');
