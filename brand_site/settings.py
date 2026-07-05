@@ -10,7 +10,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6o$h&20+f2w&d_84wzcl_
 DEBUG = False
 
 # ۳. هاست‌های مجاز – روی لوکال فقط localhost
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "raykashimisaba.com",
+    "www.raykashimisaba.com"
+]
 
 # Application definition
 INSTALLED_APPS = [
