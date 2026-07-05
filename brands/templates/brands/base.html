@@ -1198,7 +1198,7 @@ footer::before {
 }
 .contact-list li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     color: rgba(255, 255, 255, 0.72);
     font-size: 0.95rem;
@@ -1208,9 +1208,26 @@ footer::before {
 .contact-list li:nth-child(1):hover { color: var(--pink); text-shadow: 0 0 10px var(--pink); animation: neonFlicker 400ms ease-in-out; }
 .contact-list li:nth-child(3):hover { color: var(--lavender); text-shadow: 0 0 10px var(--lavender); animation: neonFlicker 400ms ease-in-out; }
 
+/* متن کنار آیکن — اجازه‌ی شکستن خط به‌جای سرریز و بریده‌شدن */
+.contact-text {
+    min-width: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    text-align: start;
+    line-height: 1.5;
+}
+/* شماره تلفن و ایمیل چپ‌چین و ایزوله بشن تا وسط متن فارسی به‌هم نریزن */
+.ltr-text {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-block;
+}
+
 /* آیکن‌های تماس با افکت نئونی */
 .contact-icon {
     flex-shrink: 0;
+    margin-top: 2px;
     color: var(--gold-light);
     stroke-width: 2;
     transition: transform var(--dur-base) var(--ease-snap), color var(--dur-base) var(--ease-out), filter var(--dur-base) var(--ease-out);
@@ -1226,8 +1243,8 @@ footer::before {
 .email-link-footer {
     color: rgba(255, 255, 255, 0.72);
     text-decoration: none;
-    display: inline-flex;
-    align-items: center;
+    display: flex;
+    align-items: flex-start;
     gap: 10px;
     transition: color var(--dur-fast) var(--ease-out), text-shadow var(--dur-fast) var(--ease-out);
 }
@@ -1257,15 +1274,16 @@ footer::before {
 
 /* واکنش‌گرایی */
 @media (max-width: 768px) {
+    .site-footer { margin-top: 56px; }
     .footer-grid {
-        grid-template-columns: 1fr 1fr;      /* دو ستون مساوی */
-        gap: 16px;
+        grid-template-columns: 1fr;   /* تک‌ستونه — قبلاً دوستونه بود و باعث می‌شد اطلاعات تماس در نصف عرض جا نشه و بریده بشه */
+        gap: 14px;
+        padding: 32px 18px 22px;
         text-align: center;
     }
 
-    /* کارت برند تمام عرض ردیف اول را بگیرد */
     .footer-card:first-child {
-        grid-column: span 2;
+        grid-column: auto;
     }
 
     .footer-desc {
@@ -1277,18 +1295,24 @@ footer::before {
         padding-left: 0;
     }
 
-    .contact-list li {
-        justify-content: center;
-    }
+    /* اطلاعات تماس چپ‌چین (خوانا) می‌مونه، حتی وقتی بقیه‌ی فوتر وسط‌چینه */
+    .contact-list { text-align: start; }
+    .contact-list li { justify-content: flex-start; }
+    .email-link-footer { justify-content: flex-start; }
 
     .site-footer::after {
         inset: -20% -20%;
     }
 
-    /* اختیاری: فاصلهٔ کمتر برای گوشی‌های خیلی باریک */
+    /* فاصله‌ی کمتر برای گوشی‌های خیلی باریک، و کوتاه‌تر شدن کل فوتر */
     .footer-card {
-        padding: 20px 16px;
+        padding: 18px 16px;
     }
+    .footer-heading { margin-bottom: 12px; font-size: 1rem; }
+    .footer-card ul { gap: 8px; }
+    .contact-list { gap: 10px; }
+    .contact-list li, .email-link-footer { font-size: 0.88rem; }
+    .footer-bottom { margin-top: 24px; padding-top: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1787,7 +1811,7 @@ footer::before {
                     <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                     </svg>
-                    +98 21 4404 5581
+                    <span class="contact-text ltr-text">+98 21 4404 5581</span>
                 </li>
                 <li>
                     <a href="mailto:zibasazzcom@gmail.com" class="email-link-footer">
@@ -1795,7 +1819,7 @@ footer::before {
                             <rect x="2" y="4" width="20" height="16" rx="2"/>
                             <path d="m22 4-10 8L2 4"/>
                         </svg>
-                        zibasazzcom@gmail.com
+                        <span class="contact-text ltr-text">zibasazzcom@gmail.com</span>
                     </a>
                 </li>
                 <li>
@@ -1803,7 +1827,7 @@ footer::before {
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                         <circle cx="12" cy="10" r="3"/>
                     </svg>
-                    {% if LANG == 'fa' %}ایران، تهران، فلکه دوم صادقیه، کوچه شهید دهزویی{% else %}Tehran, Iran{% endif %}
+                    <span class="contact-text">{% if LANG == 'fa' %}ایران، تهران، فلکه دوم صادقیه، کوچه شهید دهزویی{% else %}Tehran, Iran{% endif %}</span>
                 </li>
             </ul>
         </div>
