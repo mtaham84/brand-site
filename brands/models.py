@@ -124,6 +124,7 @@ class CatalogPDF(models.Model):
     pdf_file = models.FileField(upload_to='catalogs/')
     cover_image = models.ImageField(upload_to='catalogs/covers/', blank=True, null=True)
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='en')
+    download_count = models.IntegerField(default=0) # ⭐️ فیلد اضافه شده برای رفع خطای ادمین
 
     def __str__(self):
         return f"{self.title or 'Catalog'} ({self.get_language_display()})"
@@ -162,6 +163,3 @@ class ContactRequest(models.Model):
     class Meta:
         verbose_name = "Contact Request"
         verbose_name_plural = "Contact Requests"
-
-
-
