@@ -52,7 +52,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'brands.context_processors.language_processor',
-                'brands.context_processors.header_brands',
+                #'brands.context_processors.header_brands',
             ],
         },
     },
