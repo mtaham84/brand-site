@@ -4,6 +4,11 @@ from django.core.files.base import ContentFile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
+from .utils import optimize_image
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 
 class Brand(models.Model):
     name_en = models.CharField(max_length=100)
@@ -58,6 +63,14 @@ class Product(models.Model):
         default=4.0
     )  # مقیاس 0 تا 5
     is_best_seller = models.BooleanField(default=False)
+    def save(self, *args, **kwargs):
+      if self.image:
+        self.image = optimize_image(self.image)
+
+      if self.image_secondary:
+        self.image_secondary = optimize_image(self.image_secondary)
+
+      super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name_en
@@ -164,3 +177,4 @@ class CatalogPDF(models.Model):
 
     def __str__(self):
         return f"{self.title or 'Catalog'} ({self.get_language_display()})"
+    
