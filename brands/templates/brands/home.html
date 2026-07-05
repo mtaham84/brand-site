@@ -15,7 +15,7 @@
     <div class="slides-container">
         {% for banner in top_banners %}
         <div class="slide {% if forloop.first %}active{% endif %}">
-            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}" {% if not forloop.first %}loading="lazy" decoding="async"{% else %}decoding="async" fetchpriority="high"{% endif %}>
             {% if banner.link %}
             <a href="{{ banner.link }}" class="banner-link"></a>
             {% endif %}
@@ -43,7 +43,7 @@
             <div class="strip-container">
                 {% for product in best_sellers %}
                 <a href="{% url 'product_detail' product.id %}" class="card">
-                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}">
+                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}" {% if forloop.counter > 3 %}loading="lazy" decoding="async"{% endif %}>
                     <div class="card-body">
                         <div class="product-name">
                             {% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}
@@ -78,7 +78,7 @@
             <div class="strip-container">
                 {% for product in products %}
                 <a href="{% url 'product_detail' product.id %}" class="card">
-                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}">
+                    <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}" loading="lazy" decoding="async">
                     <div class="card-body">
                         <div class="product-name">
                             {% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}
@@ -108,7 +108,7 @@
     <div class="slides-container">
         {% for banner in bottom_banners %}
         <div class="slide {% if forloop.first %}active{% endif %}">
-            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}" loading="lazy" decoding="async">
             {% if banner.link %}
             <a href="{{ banner.link }}" class="banner-link"></a>
             {% endif %}
@@ -137,8 +137,8 @@
                 {% for ba in before_after_list %}
                 <div class="ba-card">
                     <div class="ba-slider">
-                        <img src="{{ ba.image_before.url }}" alt="Before" class="ba-before">
-                        <img src="{{ ba.image_after.url }}" alt="After" class="ba-after">
+                        <img src="{{ ba.image_before.url }}" alt="Before" class="ba-before" loading="lazy" decoding="async">
+                        <img src="{{ ba.image_after.url }}" alt="After" class="ba-after" loading="lazy" decoding="async">
                         <span class="ba-label ba-label-before">{% trans "Before" %}</span>
                         <span class="ba-label ba-label-after">{% trans "After" %}</span>
                         <div class="ba-handle"></div>
@@ -166,11 +166,11 @@
                 {% for media in promo_gifs %}
                     <div class="promo-card">
                         {% if media.video %}
-                            <video autoplay loop muted playsinline>
+                            <video autoplay loop muted playsinline preload="metadata">
                                 <source src="{{ media.video.url }}" type="video/mp4">
                             </video>
                         {% elif media.image %}
-                            <img src="{{ media.image.url }}" alt="{{ media.title }}">
+                            <img src="{{ media.image.url }}" alt="{{ media.title }}" loading="lazy" decoding="async">
                         {% endif %}
                         {% if media.link %}
                             <a href="{{ media.link }}" target="_blank" class="promo-link"></a>

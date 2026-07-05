@@ -4,121 +4,6 @@
 
 {% block title %}{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %} | BrandCenter{% endblock %}
 
-{% block extra_css %}
-<style>
-    .product-detail {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 40px;
-        padding: 20px;
-        background: #fff;
-        border-radius: 24px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.05);
-        margin-bottom: 30px;
-    }
-    .product-image {
-        flex: 1 1 400px;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 8px 20px rgba(26,35,126,0.1);
-    }
-    .product-image img {
-        width: 100%;
-        height: auto;
-        display: block;
-        transition: 0.5s;
-    }
-    .product-image:hover img {
-        transform: scale(1.03);
-    }
-    .product-info {
-        flex: 1 1 300px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    .product-info h1 {
-        font-size: 2rem;
-        color: var(--indigo-deep);
-        margin-bottom: 16px;
-    }
-    .product-rate {
-        font-size: 1.2rem;
-        color: #f4b400;
-        margin-bottom: 20px;
-    }
-    .product-rate .star-empty { color: #ccc; }
-    .product-description {
-        font-size: 1rem;
-        color: #444;
-        line-height: 1.8;
-        margin-bottom: 30px;
-    }
-    .back-link {
-        display: inline-block;
-        background: var(--indigo-light);
-        color: #fff;
-        padding: 10px 24px;
-        border-radius: 30px;
-        text-decoration: none;
-        transition: background 0.3s;
-    }
-    .back-link:hover {
-        background: var(--purple);
-    }
-
-    /* section محصولات مرتبط (اختیاری) */
-    .related-title {
-        font-size: 1.4rem;
-        color: var(--indigo-deep);
-        margin: 30px 0 16px;
-        padding-left: 20px;
-        border-left: 5px solid var(--purple-light);
-    }
-    [dir="rtl"] .related-title {
-        border-left: none;
-        border-right: 5px solid var(--purple-light);
-        padding-left: 0;
-        padding-right: 20px;
-    }
-    .related-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-        gap: 16px;
-        padding: 0 20px;
-    }
-    /* کارت کوچک محصول */
-    .mini-card {
-        background: #fff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        transition: 0.3s;
-        text-decoration: none;
-        color: inherit;
-    }
-    .mini-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 25px rgba(123,31,162,0.1);
-    }
-    .mini-card img {
-        width: 100%;
-        height: 160px;
-        object-fit: cover;
-    }
-    .mini-info {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-    .mini-info .name {
-        font-weight: 600;
-        color: var(--indigo-deep);
-        margin-bottom: 4px;
-    }
-    .mini-rate { color: #f4b400; font-size: 0.8rem; }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="container-fluid">
     <div class="product-detail">
@@ -126,8 +11,8 @@
     <img src="{{ product.image.url }}" alt="{{ product.name_en }}" id="mainProductImage">
     {% if product.image_secondary %}
     <div class="secondary-images">
-        <img src="{{ product.image.url }}" alt="تصویر اصلی" class="thumb active" onclick="document.getElementById('mainProductImage').src='{{ product.image.url }}'">
-        <img src="{{ product.image_secondary.url }}" alt="تصویر دوم" class="thumb" onclick="document.getElementById('mainProductImage').src='{{ product.image_secondary.url }}'">
+        <img src="{{ product.image.url }}" alt="تصویر اصلی" class="thumb active" onclick="document.getElementById('mainProductImage').src='{{ product.image.url }}'; document.querySelectorAll('.secondary-images .thumb').forEach(t => t.classList.remove('active')); this.classList.add('active');" loading="lazy" decoding="async">
+        <img src="{{ product.image_secondary.url }}" alt="تصویر دوم" class="thumb" onclick="document.getElementById('mainProductImage').src='{{ product.image_secondary.url }}'; document.querySelectorAll('.secondary-images .thumb').forEach(t => t.classList.remove('active')); this.classList.add('active');" loading="lazy" decoding="async">
     </div>
     {% endif %}
 </div>
@@ -139,7 +24,7 @@
                     {% if forloop.counter <= rate_int %}★{% else %}<span class="star-empty">☆</span>{% endif %}
                 {% endfor %}
                 {% endwith %}
-                <span style="color:#666; margin-left:6px;">({{ product.rate }})</span>
+                <span class="rate-value">({{ product.rate }})</span>
             </div>
             <p class="product-description">
                 {% if LANG == 'fa' %}{{ product.description_fa }}{% else %}{{ product.description_en }}{% endif %}
@@ -154,7 +39,7 @@
     <div class="related-grid">
         {% for rel in related_products %}
         <a href="{% url 'product_detail' rel.id %}" class="mini-card">
-            <img src="{{ rel.image.url }}" alt="{{ rel.name_en }}">
+            <img src="{{ rel.image.url }}" alt="{{ rel.name_en }}" loading="lazy" decoding="async">
             <div class="mini-info">
                 <div class="name">{% if LANG == 'fa' %}{{ rel.name_fa }}{% else %}{{ rel.name_en }}{% endif %}</div>
                 <div class="mini-rate">

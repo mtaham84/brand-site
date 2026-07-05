@@ -1399,15 +1399,24 @@ footer::before {
     position: relative;
 }
 /* استایل فیلدهای فرم */
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; color: var(--deep-purple); font-weight: 600; margin-bottom: 6px; }
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px 14px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: rgba(255,255,255,0.8);
     font-family: var(--font);
-    font-size: 0.95rem;
+    font-size: 16px; /* زیر 16px روی iOS Safari باعث زوم ناخواسته موقع فوکوس میشه */
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--orchid);
+    box-shadow: 0 0 0 3px rgba(242, 140, 106, 0.18);
 }
 /* ========== Catalog Cards (Square) ========== */
 .catalog-grid {
@@ -1539,6 +1548,7 @@ footer::before {
     box-shadow: var(--shadow);
     margin-bottom: 40px;
     user-select: none;
+    touch-action: pan-y;
 }
 
 .slides-container {
@@ -2093,6 +2103,30 @@ footer::before {
             if (!isTransitioning && slides.length > 1) startAutoPlay();
         });
 
+        // سوایپ لمسی — روی گوشی کاربر انتظار داره بتونه بنر رو swipe کنه، نه فقط دکمه بزنه
+        let touchStartX = 0;
+        let touchDeltaX = 0;
+        slider.addEventListener('touchstart', (e) => {
+            clearTimeout(autoPlayTimer);
+            touchStartX = e.touches[0].clientX;
+            touchDeltaX = 0;
+        }, { passive: true });
+        slider.addEventListener('touchmove', (e) => {
+            touchDeltaX = e.touches[0].clientX - touchStartX;
+        }, { passive: true });
+        slider.addEventListener('touchend', () => {
+            const threshold = 40;
+            if (Math.abs(touchDeltaX) > threshold) {
+                if (touchDeltaX < 0) {
+                    document.documentElement.dir === 'rtl' ? prevSlide() : nextSlide();
+                } else {
+                    document.documentElement.dir === 'rtl' ? nextSlide() : prevSlide();
+                }
+            } else if (!isTransitioning && slides.length > 1) {
+                startAutoPlay();
+            }
+        });
+
         // شروع خودکار (بازگشتی، با درنظر گرفتن مکث در اسلاید آخر)
         function startAutoPlay() {
             if (!isTransitioning && slides.length > 1) {
@@ -2115,6 +2149,9 @@ footer::before {
 })();
 // ===== Typewriter effect for overlay texts =====
 (function() {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isSmallScreen = window.innerWidth <= 600;
+
     const typewriterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -2123,11 +2160,19 @@ footer::before {
                 el.dataset.typed = 'true';
 
                 const fullText = el.textContent.trim();
+
+                // با حرکت کم یا صفحه‌ی کوچیک، تایپ‌کردن حرف‌به‌حرف فقط تأخیر بی‌فایده‌ست؛
+                // متن رو یکجا نشون بده تا محتوا سریع‌تر قابل خوندن باشه
+                if (prefersReduced || isSmallScreen) {
+                    typewriterObserver.unobserve(el);
+                    return;
+                }
+
                 el.textContent = '';
                 let charIndex = 0;
                 const totalChars = fullText.length;
-                const totalDuration = 5500; // کل زمان تایپ (میلی‌ثانیه)
-                const delayPerChar = Math.max(20, Math.floor(totalDuration / totalChars));
+                const totalDuration = 3000; // کل زمان تایپ (میلی‌ثانیه) — کوتاه‌تر شد تا محتوا سریع‌تر خوانا باشه
+                const delayPerChar = Math.max(15, Math.floor(totalDuration / totalChars));
 
                 const typeNextChar = () => {
                     if (charIndex < totalChars) {
