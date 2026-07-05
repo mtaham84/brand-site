@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6o$h&20+f2w&d_84wzcl_(ak6j6_p2*6x#3ib1)z=(1l%#f27n')
 
 # ۲. حالت Debug – روی لوکال True (با متغیر محیطی خاموش)
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = False
 
 # ۳. هاست‌های مجاز – روی لوکال فقط localhost
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
@@ -99,7 +99,7 @@ STATIC_URL = '/static/'          # اسلش اول فراموش نشود
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')   # جدا از پوشه media قدیمی
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')   # جدا از پوشه media قدیمی
 
 # ۶. (اختیاری) اگر خواستید Object Storage داشته باشید، این بخش بعداً فعال می‌شود
 # if os.environ.get('AWS_ACCESS_KEY_ID'):
