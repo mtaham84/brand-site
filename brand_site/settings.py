@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-6o$h&20+f2w&d_84wzcl_(ak6j6_p2*6x#3ib1)z=(1l%#f27n')
 
 # ۲. حالت Debug – روی لوکال True (با متغیر محیطی خاموش)
-DEBUG = False
+DEBUG = True
 
 # ۳. هاست‌های مجاز – روی لوکال فقط localhost
 ALLOWED_HOSTS = [
