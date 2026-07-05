@@ -164,17 +164,4 @@ class ContactRequest(models.Model):
         verbose_name_plural = "Contact Requests"
 
 
-class CatalogPDF(models.Model):
-    LANGUAGE_CHOICES = [
-        ('en', 'English'),
-        ('fa', 'Persian'),
-    ]
-    title = models.CharField(max_length=100, blank=True)
-    pdf_file = models.FileField(upload_to='catalogs/')
-    cover_image = models.ImageField(upload_to='catalogs/covers/', blank=True, null=True)
-    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='en')
-    download_count = models.PositiveIntegerField(default=0)   # ← جدید
 
-    def __str__(self):
-        return f"{self.title or 'Catalog'} ({self.get_language_display()})"
-    
