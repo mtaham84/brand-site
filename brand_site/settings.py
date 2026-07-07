@@ -16,6 +16,12 @@ ALLOWED_HOSTS = [
     "raykashimisaba.com",
     "www.raykashimisaba.com"
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://raykashimisaba.com",
+    "https://www.raykashimisaba.com",
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 INSTALLED_APPS = [
