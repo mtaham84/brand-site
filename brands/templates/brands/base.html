@@ -13,7 +13,6 @@
     <style>
         /* ==========================================================================
            BrandCenter — Purple Bloom Theme (Final) – optimized for mobile
-           با اصلاح اندازه کارت‌ها و منوی برندها
            ========================================================================== */
 
         :root {
@@ -122,7 +121,7 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--purple); }
         ::selection { background: var(--pale-yellow); color: var(--deep-purple); }
 
-        /* ============ Ambient decorative blobs ============ */
+        /* ============ Ambient decorative blobs (low opacity) ============ */
         body::before, body::after {
             content: '';
             position: fixed;
@@ -326,7 +325,8 @@
                         transform var(--dur-base) var(--ease-snap),
                         visibility var(--dur-base);
         }
-        .mega-menu-trigger:hover .mega-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+        .mega-menu-trigger:hover .mega-menu,
+        .mega-menu-trigger.active .mega-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
 
         .mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
@@ -342,7 +342,8 @@
             transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-snap), box-shadow var(--dur-base) var(--ease-out);
             will-change: transform, border-color;
         }
-        .mega-menu-trigger:hover .brand-column { animation: fadeInUp var(--dur-base) var(--ease-out) backwards; }
+        .mega-menu-trigger:hover .brand-column,
+        .mega-menu-trigger.active .brand-column { animation: fadeInUp var(--dur-base) var(--ease-out) backwards; }
         .mega-grid .brand-column:nth-child(1) { animation-delay: 40ms; }
         .mega-grid .brand-column:nth-child(2) { animation-delay: 90ms; }
         .mega-grid .brand-column:nth-child(3) { animation-delay: 140ms; }
@@ -488,9 +489,6 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            /* عرض ثابت برای استریپ‌ها */
-            width: 220px;
-            flex: 0 0 auto;
         }
         .card::before, .product-card::before, .mini-card::before {
             content: '';
@@ -513,7 +511,7 @@
         .card img, .product-card img, .mini-card img { width: 100%; height: 230px; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
         .card:hover img, .product-card:hover img, .mini-card:hover img { transform: scale(1.08); }
 
-        .card-body, .card-info, .card-details, .mini-info { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .card-body, .card-info, .card-details, .mini-info { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
         .product-name, .card-details h3, .card-info .product-name, .mini-info .name {
             font-weight: 700;
@@ -521,6 +519,10 @@
             font-size: 1.05rem;
             line-height: 1.4;
             transition: color var(--dur-fast) var(--ease-out);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .card:hover .product-name, .product-card:hover .card-details h3,
         .product-card:hover .card-info .product-name, .mini-card:hover .mini-info .name { color: var(--orchid); }
@@ -573,7 +575,7 @@
             -webkit-overflow-scrolling: touch;
             overscroll-behavior-x: contain;
         }
-        /* دیگر نیازی به min-width روی کارت نداریم چون width ثابت داریم */
+        .strip-container .card { width: 240px; min-width: 240px; max-width: 240px; flex-shrink: 0; scroll-snap-align: start; }
         .product-strip { margin-bottom: 48px; }
 
         /* ============ Banners ============ */
@@ -616,10 +618,11 @@
         }
         [dir="rtl"] .brand-overlay { text-align: right; }
         .brand-overlay h1 { font-size: 2rem; font-weight: 800; animation: fadeInUp var(--dur-slow) var(--ease-out) 100ms backwards; }
+        /* توضیحات برند از بنر خارج شده و در پایین قرار می‌گیرد — بنابراین اینجا نیازی نیست */
 
         /* ===== باکس توضیحات برند (زیر بنر) ===== */
         .brand-description-wrapper {
-            margin: -10px 0 34px 0;
+            margin: -10px 0 34px 0; /* فاصله‌ی منفی جزئی برای همپوشانی ظریف */
             padding: 0 8px;
             position: relative;
             z-index: 2;
@@ -647,8 +650,9 @@
             line-height: 1.8;
             font-weight: 400;
             margin: 0;
-            min-height: 2.4rem;
+            min-height: 2.4rem; /* جلوگیری از جابجایی هنگام تایپ */
         }
+        /* RTL adjustment */
         [dir="rtl"] .brand-desc-text { text-align: right; }
 
         .category-header {
@@ -666,11 +670,7 @@
         .category-header p { opacity: 0.95; margin-top: 8px; animation: fadeInUp var(--dur-slow) var(--ease-out) 100ms backwards; }
 
         /* ============ Product grids ============ */
-        .product-grid, .best-grid, .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 22px;
-        }
+        .product-grid, .best-grid, .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px; }
         .related-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 
         /* ============ Product detail page ============ */
@@ -1486,10 +1486,8 @@
             .brand-column .brand-logo { width: 50px; height: 50px; }
             .brand-main-link { font-size: 1rem; margin: 8px 0; }
 
-            /* ===== اندازه کارت‌ها در موبایل ===== */
-            .card, .product-card, .mini-card {
-                width: 160px;  /* عرض ثابت برای موبایل */
-            }
+            /* ===== بهبود اندازه کارت‌ها در موبایل ===== */
+            .strip-container .card { width: 150px; min-width: 150px; max-width: 150px; }
             .card img, .product-card img, .mini-card img { height: 200px; }
 
             .product-grid, .best-grid, .related-grid {
@@ -1540,9 +1538,7 @@
             .container { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
             .container-fluid { padding: 22px 16px; }
             .logo { font-size: 1.4rem; }
-            .card, .product-card, .mini-card {
-                width: 140px;  /* عرض ثابت برای موبایل کوچک */
-            }
+            .strip-container .card { width: 130px; min-width: 130px; max-width: 130px; }
             .card img, .product-card img { height: 180px; }
             .promo-card { width: 250px; }
             .ba-card { min-width: 230px; }
@@ -1596,7 +1592,7 @@
             .site-footer::after, .footer-card::before, .footer-logo, .footer-heading,
             .footer-card ul li a, .contact-list li, .email-link-footer { animation: none !important; }
             .reveal-on-scroll { transition: none !important; opacity: 1; transform: none !important; }
-            .brand-desc-text { animation: none !important; opacity: 1 !important; }
+            .brand-desc-text { animation: none !important; opacity: 1 !important; } /* جلوگیری از تایپ‌رایتر در حالت motion reduce */
         }
 
         :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
@@ -1769,18 +1765,21 @@
             });
         });
 
-        // ===== Mega menu toggle on mobile (fixed) =====
+        // ===== Mega menu toggle — works via click on any device/width,
+        // ===== so it doesn't depend on the device actually supporting :hover reliably =====
         const megaTrigger = document.getElementById('megaTrigger');
-        if (window.innerWidth <= 900) {
-            // فقط روی لینک اصلی که href="#" دارد کلیک کنیم
-            const brandLink = megaTrigger.querySelector('a[href="#"]');
-            if (brandLink) {
-                brandLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    megaTrigger.classList.toggle('active');
-                });
-            }
+        const brandLink = megaTrigger.querySelector(':scope > a');
+        if (brandLink) {
+            brandLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                megaTrigger.classList.toggle('active');
+            });
         }
+        document.addEventListener('click', (e) => {
+            if (!megaTrigger.contains(e.target)) {
+                megaTrigger.classList.remove('active');
+            }
+        });
 
         // ===== Language switcher =====
         const langBtn = document.getElementById('langBtn');
@@ -1974,6 +1973,7 @@
         // ===== Typewriter effect – فعال در همه اندازه‌ها =====
         (function() {
             const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // شرط isSmallScreen حذف شد تا در موبایل هم اجرا شود
 
             const typewriterObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1983,12 +1983,14 @@
                         el.dataset.typed = 'true';
                         const fullText = el.textContent.trim();
                         if (prefersReduced) {
+                            // در حالت reduced motion، متن را یکجا نشان بده
                             typewriterObserver.unobserve(el);
                             return;
                         }
                         el.textContent = '';
                         let charIndex = 0;
                         const totalChars = fullText.length;
+                        // سرعت تایپ در موبایل کمی سریع‌تر (برای تجربه بهتر)
                         const isMobile = window.innerWidth <= 600;
                         const totalDuration = isMobile ? 1800 : 3000;
                         const delayPerChar = Math.max(12, Math.floor(totalDuration / totalChars));

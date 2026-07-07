@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-for-local')
 
 # ۲. حالت Debug – در لوکال True (اگر متغیر محیطی نبود)، روی سرور False
-DEBUG = True
+DEBUG = False
 
 # ۳. هاست‌های مجاز – همیشه localhost را بپذیرد؛ اگر دامنه‌ای تنظیم شده باشد، آن را هم اضافه کند
 ALLOWED_HOSTS = [
@@ -20,8 +20,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://raykashimisaba.com",
     "https://www.raykashimisaba.com",
 ]
+CSRF_COOKIE_SECURE = True
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 INSTALLED_APPS = [
