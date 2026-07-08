@@ -8,6 +8,7 @@ from .utils import optimize_image
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from ckeditor.fields import RichTextField
 
 
 class Brand(models.Model):
@@ -53,8 +54,8 @@ class Product(models.Model):
     )
     name_en = models.CharField(max_length=200)
     name_fa = models.CharField(max_length=200)
-    description_en = models.TextField()
-    description_fa = models.TextField()
+    description_fa = RichTextField()
+    description_en = RichTextField()
     image = models.ImageField(upload_to='products/')
     image_secondary = models.ImageField(upload_to='products/', blank=True, null=True, verbose_name="تصویر دوم")
     rate = models.DecimalField(

@@ -812,13 +812,16 @@
         .ba-card {
             min-width: 300px; flex-shrink: 0;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px) saturate(160%);
-            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            backdrop-filter: blur(8px) saturate(150%);
+            -webkit-backdrop-filter: blur(8px) saturate(150%);
             border-radius: var(--radius-lg);
             overflow: hidden;
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-sm);
             transition: transform var(--dur-base) var(--ease-snap), box-shadow var(--dur-base) var(--ease-out);
+            /* کارت‌هایی که هنوز داخل دید کاربر نیستن رندر نشن — روی نوارهای طولانی خیلی سبک‌تر میشه */
+            content-visibility: auto;
+            contain-intrinsic-size: 300px 320px;
         }
         .ba-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
         .ba-card .ba-slider { width: 100%; height: 320px; margin: 0; border-radius: 0; }
@@ -1506,7 +1509,7 @@
             .brand-desc-text { font-size: 0.95rem; }
 
             .category-header { padding: 30px 20px; }
-            .ba-card { min-width: 260px; }
+            .ba-card { min-width: 260px; contain-intrinsic-size: 260px 280px; }
             .ba-card .ba-slider { height: 280px; }
             .home-banner img, .brand-banner { animation-duration: 24s; }
             .promo-card:hover { transform: translateY(-6px); }
@@ -1545,7 +1548,7 @@
             .strip-container .card .rating, .strip-container .card .rate { font-size: 0.88rem; gap: 2px; }
             .strip-container .card .rate-value { font-size: 0.78rem; margin-inline-start: 4px; }
             .promo-card { width: 250px; }
-            .ba-card { min-width: 230px; }
+            .ba-card { min-width: 230px; contain-intrinsic-size: 230px 240px; }
             .ba-card .ba-slider { height: 240px; }
             .page-title { font-size: 1.5rem; }
             .product-info h1 { font-size: 1.4rem; }
@@ -1580,6 +1583,8 @@
             .card:active img, .product-card:active img, .mini-card:active img { transform: scale(1.03); }
             .promo-card:hover { transform: none; }
             .promo-card:active { transform: scale(0.97); }
+            .ba-card { backdrop-filter: blur(4px) saturate(130%); -webkit-backdrop-filter: blur(4px) saturate(130%); }
+            .site-header { backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); }
             body::before, body::after { animation-duration: 30s; }
         }
 
@@ -1637,7 +1642,7 @@
     <header class="site-header">
         <div class="container">
             <a href="{% url 'home' %}" class="logo">
-                <img src="{% static 'brands/images/logo.png' %}" alt="BrandCenter" class="logo-img">
+                <img src="{% static 'brands/images/logo.png' %}" alt="BrandCenter" class="logo-img" fetchpriority="high" decoding="async">
             </a>
             <button class="hamburger" id="hamburgerBtn" aria-label="منو">&#9776;</button>
 

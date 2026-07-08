@@ -28,7 +28,8 @@
                     <span class="rate-value">{{ product.rate }}</span>
                 </div>
                 <div class="description">
-                    {% if LANG == 'fa' %}{{ product.description_fa|truncatechars:80 }}{% else %}{{ product.description_en|truncatechars:80 }}{% endif %}
+                    {# === این خط اصلاح شده است === #}
+                    {% if LANG == 'fa' %}{{ product.description_fa|striptags|truncatechars:80 }}{% else %}{{ product.description_en|striptags|truncatechars:80 }}{% endif %}
                 </div>
             </div>
         </a>

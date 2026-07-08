@@ -27,7 +27,7 @@
                 <span class="rate-value">({{ product.rate }})</span>
             </div>
             <p class="product-description">
-                {% if LANG == 'fa' %}{{ product.description_fa }}{% else %}{{ product.description_en }}{% endif %}
+                {% if LANG == 'fa' %}{{ product.description_fa|safe }}{% else %}{{ product.description_en|safe }}{% endif %}
             </p>
             <a href="{% url 'brand_detail' product.brand.id %}" class="back-link">← {% trans "Back to brand" %}</a>
         </div>
