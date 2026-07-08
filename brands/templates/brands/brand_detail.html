@@ -22,8 +22,9 @@
     <!-- ===== باکس توضیحات برند (زیر بنر) ===== -->
     <div class="brand-description-wrapper reveal-on-scroll">
         <div class="brand-description-box">
-            <p class="typewriter brand-desc-text">
-                {% if LANG == 'fa' %}{{ brand.description_fa }}{% else %}{{ brand.description_en }}{% endif %}
+            {# === کلاس typewriter حذف شد تا Rich Text درست کار کند === #}
+            <p class="brand-desc-text">
+                {% if LANG == 'fa' %}{{ brand.description_fa|safe }}{% else %}{{ brand.description_en|safe }}{% endif %}
             </p>
         </div>
     </div>
@@ -46,7 +47,8 @@
                     </div>
                 </div>
                 <div class="description">
-                    {% if LANG == 'fa' %}{{ product.description_fa|truncatechars:80 }}{% else %}{{ product.description_en|truncatechars:80 }}{% endif %}
+                    {# === striptags اضافه شد تا تگ‌های HTML در کارت محصول شکسته نشوند === #}
+                    {% if LANG == 'fa' %}{{ product.description_fa|striptags|truncatechars:80 }}{% else %}{{ product.description_en|striptags|truncatechars:80 }}{% endif %}
                 </div>
             </div>
         </a>
