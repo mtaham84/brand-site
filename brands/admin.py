@@ -14,8 +14,9 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name_en', 'brand', 'category', 'rate', 'is_best_seller']
-    list_filter = ['brand', 'category', 'is_best_seller']
+    list_display = ['name_en', 'brand', 'category', 'rate', 'is_best_seller', 'is_new_packaging']
+    list_filter = ['brand', 'category', 'is_best_seller', 'is_new_packaging']
+    list_editable = ['is_new_packaging']
 
 @admin.register(HomeBanner)
 class HomeBannerAdmin(admin.ModelAdmin):

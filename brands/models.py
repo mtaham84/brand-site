@@ -64,6 +64,11 @@ class Product(models.Model):
         default=4.0
     )  # مقیاس 0 تا 5
     is_best_seller = models.BooleanField(default=False)
+    is_new_packaging = models.BooleanField(
+        default=False,
+        verbose_name="بسته‌بندی جدید (New Emballage)",
+        help_text="فعال کنید تا روی کارت این محصول برچسب «بسته‌بندی جدید» نمایش داده شود."
+    )
     def save(self, *args, **kwargs):
       if self.image:
         self.image = optimize_image(self.image)

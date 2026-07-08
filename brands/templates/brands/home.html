@@ -43,6 +43,9 @@
             <div class="strip-container">
                 {% for product in best_sellers %}
                 <a href="{% url 'product_detail' product.id %}" class="card">
+                    {% if product.is_new_packaging %}
+                    <span class="new-package-badge">✨ {% trans "New Packaging" %}</span>
+                    {% endif %}
                     <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}" {% if forloop.counter > 3 %}loading="lazy" decoding="async"{% endif %}>
                     <div class="card-body">
                         <div class="product-name">
@@ -78,6 +81,9 @@
             <div class="strip-container">
                 {% for product in products %}
                 <a href="{% url 'product_detail' product.id %}" class="card">
+                    {% if product.is_new_packaging %}
+                    <span class="new-package-badge">✨ {% trans "New Packaging" %}</span>
+                    {% endif %}
                     <img src="{{ product.image.url }}" alt="{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}" loading="lazy" decoding="async">
                     <div class="card-body">
                         <div class="product-name">

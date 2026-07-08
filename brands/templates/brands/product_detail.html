@@ -8,6 +8,9 @@
 <div class="container-fluid">
     <div class="product-detail">
        <div class="product-image">
+    {% if product.is_new_packaging %}
+    <span class="new-package-badge">✨ {% trans "New Packaging" %}</span>
+    {% endif %}
     <img src="{{ product.image.url }}" alt="{{ product.name_en }}" id="mainProductImage">
     {% if product.image_secondary %}
     <div class="secondary-images">

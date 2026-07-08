@@ -33,6 +33,9 @@
     <section class="product-grid">
         {% for product in products %}
         <a href="{% url 'product_detail' product.id %}" class="product-card">
+            {% if product.is_new_packaging %}
+            <span class="new-package-badge">✨ {% trans "New Packaging" %}</span>
+            {% endif %}
             <img src="{{ product.image.url }}" alt="{{ product.name_en }}" {% if forloop.counter > 4 %}loading="lazy" decoding="async"{% endif %}>
             <div class="card-info">
                 <div>

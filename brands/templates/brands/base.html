@@ -577,6 +577,28 @@
         }
         .brand-badge { inset-inline-start: auto; inset-inline-end: 14px; }
 
+        /* ---- New packaging / New Emballage badge ---- */
+        .new-package-badge {
+            position: absolute;
+            top: 14px; inset-inline-end: 14px; inset-inline-start: auto;
+            display: flex; align-items: center; gap: 5px;
+            background: linear-gradient(120deg, var(--lavender) 0%, var(--purple) 100%);
+            color: var(--text-invert);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.2px;
+            z-index: 2;
+            box-shadow: var(--shadow-sm), 0 0 0 3px rgba(69, 178, 157, 0.16);
+            animation: badgeBounceIn var(--dur-slow) var(--ease-snap) both, sparkPulse 2.4s ease-in-out infinite 900ms;
+            white-space: nowrap;
+        }
+        .new-package-badge svg { width: 13px; height: 13px; flex-shrink: 0; }
+        /* وقتی هم بج «پرفروش» و هم «بسته‌بندی جدید» روی یک کارت باشن، بج بسته‌بندی پایین‌تر میره تا رو هم نیفتن */
+        .best-badge ~ .new-package-badge,
+        .new-package-badge.stacked { top: 52px; }
+
         /* ============ Horizontal strips ============ */
         .strip-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
         .strip-header h2 { font-size: 1.4rem; color: var(--deep-purple); font-weight: 800; }
@@ -697,7 +719,7 @@
             box-shadow: var(--shadow);
             margin-bottom: 36px;
         }
-        .product-image { border-radius: var(--radius); overflow: hidden; }
+        .product-image { border-radius: var(--radius); overflow: hidden; position: relative; }
         .product-image img { width: 100%; border-radius: var(--radius); transition: transform var(--dur-slow) var(--ease-out); }
         .product-image:hover img { transform: scale(1.05) rotate(0.5deg); }
 

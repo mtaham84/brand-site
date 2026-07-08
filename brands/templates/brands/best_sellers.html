@@ -11,6 +11,9 @@
         {% for product in products %}
         <a href="{% url 'product_detail' product.id %}" class="product-card">
             <span class="best-badge">{% trans "Hot" %}</span>
+            {% if product.is_new_packaging %}
+            <span class="new-package-badge stacked">✨ {% trans "New Packaging" %}</span>
+            {% endif %}
             <img src="{{ product.image.url }}" alt="{{ product.name_en }}" {% if forloop.counter > 4 %}loading="lazy" decoding="async"{% endif %}>
             <div class="card-details">
                 <h3>{% if LANG == 'fa' %}{{ product.name_fa }}{% else %}{{ product.name_en }}{% endif %}</h3>
