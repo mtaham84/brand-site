@@ -14,8 +14,8 @@ from ckeditor.fields import RichTextField
 class Brand(models.Model):
     name_en = models.CharField(max_length=100)
     name_fa = models.CharField(max_length=100)
-    description_en = models.TextField(blank=True)
-    description_fa = models.TextField(blank=True)
+    description_fa = RichTextField()
+    description_en = RichTextField()
     logo = models.ImageField(upload_to='brands/logos/')
     banner = models.ImageField(upload_to='brands/banners/', blank=True)
     order = models.IntegerField(default=0)

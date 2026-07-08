@@ -7,8 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}برند سنتر | Brand Center{% endblock %}</title>
 
-    <!-- فونت فارسی + انگلیسی -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- فونت فارسی + انگلیسی — به‌صورت غیربلوکه لود میشه تا رندر اولیه‌ی صفحه معطلش نمونه -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+
+    <!-- اگه تصاویر/مدیا از یه دامنه‌ی جدا (CDN، ابری، ArvanCloud و…) سرو میشن،
+         preconnect به اون دامنه هم اضافه کنید، مثلا:
+         <link rel="preconnect" href="https://your-media-domain.com" crossorigin>
+         این باعث میشه اتصال TLS از قبل برقرار بشه و هر عکس زودتر شروع به دانلود کنه. -->
 
     <style>
         /* ==========================================================================
@@ -489,6 +498,9 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            /* کارت‌هایی که هنوز داخل دید کاربر نیستن رندر نشن — روی گرید/نوارهای پرتعداد خیلی سبک‌تر میشه */
+            content-visibility: auto;
+            contain-intrinsic-size: 240px 360px;
         }
         .card::before, .product-card::before, .mini-card::before {
             content: '';
@@ -1490,7 +1502,7 @@
             .brand-main-link { font-size: 1rem; margin: 8px 0; }
 
             /* ===== بهبود اندازه کارت‌ها در موبایل ===== */
-            .strip-container .card { width: 180px; min-width: 180px; max-width: 180px; }
+            .strip-container .card { width: 180px; min-width: 180px; max-width: 180px; contain-intrinsic-size: 180px 280px; }
             .card img, .product-card img, .mini-card img { height: 170px; }
 
             .product-grid, .best-grid, .related-grid {
@@ -1541,7 +1553,7 @@
             .container { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
             .container-fluid { padding: 22px 16px; }
             .logo { font-size: 1.4rem; }
-            .strip-container .card { width: 172px; min-width: 172px; max-width: 172px; }
+            .strip-container .card { width: 172px; min-width: 172px; max-width: 172px; contain-intrinsic-size: 172px 230px; }
             .card img, .product-card img { height: 150px; }
             .strip-container .card .card-body { padding: 12px; gap: 6px; }
             .strip-container .card .product-name { font-size: 0.92rem; }
