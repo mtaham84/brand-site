@@ -9,7 +9,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    path('admin/', admin.site.urls),
+    path('sr8405/', admin.site.urls),
     path('', include('brands.urls')),
 )
 

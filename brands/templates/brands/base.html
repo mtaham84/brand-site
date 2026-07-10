@@ -4,7 +4,8 @@
 <html lang="{{ LANG }}" dir="{% if LANG == 'fa' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#FAFCFC">
     <title>{% block title %}برند سنتر | Brand Center{% endblock %}</title>
 
     <!-- فونت فارسی + انگلیسی — به‌صورت غیربلوکه لود میشه تا رندر اولیه‌ی صفحه معطلش نمونه -->
@@ -189,20 +190,21 @@
         /* ============ Scroll reveal ============ */
         .reveal-on-scroll {
             opacity: 0;
-            transform: translateY(48px) scale(0.96);
-            transition: opacity 2000ms var(--ease-out), transform 2000ms var(--ease-out);
+            transform: translateY(30px) scale(0.98);
+            transition: opacity 680ms var(--ease-out), transform 680ms var(--ease-out);
             will-change: transform, opacity;
         }
         .reveal-on-scroll.in-view {
             opacity: 1;
             transform: translateY(0) scale(1);
+            will-change: auto; /* آزاد کردن حافظه GPU بعد از نمایش */
         }
         .reveal-on-scroll.category-header,
         .reveal-on-scroll.brand-page-header,
         .reveal-on-scroll.contact-card,
         .reveal-on-scroll.product-detail,
         .reveal-on-scroll.home-banner {
-            transform: translateY(50px);
+            transform: translateY(36px);
         }
         .reveal-on-scroll.category-header.in-view,
         .reveal-on-scroll.brand-page-header.in-view,
@@ -381,9 +383,31 @@
         .sub-menu ul li a:hover { background: var(--pale-yellow); color: var(--deep-purple) !important; transform: translateX(3px); }
         [dir="rtl"] .sub-menu ul li a:hover { transform: translateX(-3px); }
 
-        /* ---- Hamburger ---- */
-        .hamburger { display: none; background: none; border: none; color: var(--deep-purple); font-size: 26px; cursor: pointer; transition: transform var(--dur-fast) var(--ease-snap); }
-        .hamburger:active { transform: scale(0.85) rotate(90deg); }
+        /* ---- Hamburger (سه‌خط انیمیت‌شونده → ضربدر) ---- */
+        .hamburger {
+            display: none;
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            transition: transform var(--dur-fast) var(--ease-snap), background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+        }
+        .hamburger:active { transform: scale(0.9); }
+        .hamburger .hamburger-line {
+            display: block;
+            width: 20px; height: 2px;
+            border-radius: var(--radius-pill);
+            background: var(--deep-purple);
+            transition: transform var(--dur-base) var(--ease-snap), opacity var(--dur-fast) var(--ease-out);
+        }
+        .hamburger.is-open { background: var(--pale-yellow); border-color: var(--gold-light); }
+        .hamburger.is-open .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.is-open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0.2); }
+        .hamburger.is-open .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         /* ---- Language switch ---- */
         .lang-switch { position: relative; }
@@ -1457,59 +1481,120 @@
             :root { --header-h: 66px; }
             .container { gap: 10px; }
             .hamburger {
-                display: flex; align-items: center; justify-content: center;
-                width: 44px; height: 44px; font-size: 22px;
+                display: flex;
+                width: 44px; height: 44px;
                 order: 1;
             }
             .logo { order: 0; }
             .lang-switch { order: 2; }
 
+            /* ===== پنل منوی موبایل: تمام‌ارتفاع + اسکرولِ داخلی =====
+               فیکسِ باگ: قبلا لیست برندها از صفحه بیرون می‌زد و قابل اسکرول نبود */
+            body.nav-locked { overflow: hidden; }
             .main-nav {
-                display: none;
-                position: absolute;
+                display: flex;
+                position: fixed;
                 top: var(--header-h);
                 left: 0;
                 right: 0;
-                background: rgba(255,255,255,0.95);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--border);
-                padding: 20px;
+                height: calc(100vh - var(--header-h));
+                height: calc(100dvh - var(--header-h));
+                background: rgba(255,255,255,0.97);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+                padding: 18px 18px calc(48px + env(safe-area-inset-bottom));
                 box-shadow: var(--shadow-lg);
                 flex-direction: column;
-                animation: fadeInDown var(--dur-base) var(--ease-out);
-                z-index: 99;
+                z-index: 999;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+                touch-action: pan-y;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-14px);
+                pointer-events: none;
+                transition: opacity var(--dur-base) var(--ease-out),
+                            transform var(--dur-base) var(--ease-snap),
+                            visibility var(--dur-base);
             }
-            .main-nav.active { display: flex; }
+            .main-nav.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
             .main-nav ul {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 4px;
+                gap: 6px;
             }
+            /* ورود پلکانی آیتم‌های منو */
+            .main-nav.active > ul > li { animation: fadeInUp 420ms var(--ease-out) backwards; }
+            .main-nav.active > ul > li:nth-child(1) { animation-delay: 30ms; }
+            .main-nav.active > ul > li:nth-child(2) { animation-delay: 80ms; }
+            .main-nav.active > ul > li:nth-child(3) { animation-delay: 130ms; }
+            .main-nav.active > ul > li:nth-child(4) { animation-delay: 180ms; }
+            .main-nav.active > ul > li:nth-child(n+5) { animation-delay: 230ms; }
             .main-nav > ul > li > a {
                 display: block;
                 text-align: center;
                 padding: 14px 16px;
-                font-size: 1rem;
+                font-size: 1.02rem;
+                border-radius: var(--radius);
+                background: var(--surface-soft);
+                border: 1px solid var(--border);
+                color: var(--deep-purple);
             }
+            .main-nav > ul > li > a::before { display: none; }
+            .main-nav > ul > li > a:hover { color: var(--deep-purple); }
+            .main-nav > ul > li > a:active { transform: scale(0.985); background: var(--pale-yellow); }
+            /* فلشِ بازشوی منوی برندها */
+            .main-nav > ul > li.mega-menu-trigger > a::after {
+                content: '▾';
+                position: static;
+                display: inline-block;
+                width: auto; height: auto;
+                background: none;
+                margin-inline-start: 8px;
+                font-size: 0.85em;
+                transform: none;
+                vertical-align: middle;
+                transition: transform var(--dur-base) var(--ease-snap);
+            }
+            .mega-menu-trigger.active > a { background: var(--pale-yellow); border-color: var(--gold-light); }
+            .mega-menu-trigger.active > a::after { transform: rotate(180deg); }
 
-            /* ===== رفع تکان خوردن کاشی برندها در موبایل ===== */
+            /* ===== منوی برندها در موبایل: آکاردئون نرم، بدون پرش، کاملا قابل اسکرول ===== */
             .mega-menu {
                 position: static;
                 transform: none !important;
                 width: 100%;
                 min-width: 0;
                 box-shadow: none;
-                padding: 16px;
                 border: none;
                 opacity: 1;
                 visibility: visible;
                 pointer-events: auto;
-                margin-top: 8px;
+                margin-top: 0;
                 background: transparent;
                 backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                display: grid;
+                grid-template-rows: 0fr;
+                padding: 0 4px;
+                transition: grid-template-rows 420ms var(--ease-out), padding 420ms var(--ease-out);
             }
-            .mega-grid { grid-template-columns: 1fr; gap: 12px; }
+            .mega-menu-trigger.active .mega-menu {
+                grid-template-rows: 1fr;
+                padding: 12px 4px 6px;
+            }
+            .mega-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                overflow: hidden;
+                min-height: 0;
+            }
             .brand-column {
                 transform: none !important;
                 animation: none !important;
@@ -1520,8 +1605,19 @@
                 border: 1px solid var(--border);
             }
             .brand-column:hover { transform: none !important; box-shadow: none !important; }
+            .brand-column:active { border-color: var(--orchid); background: rgba(255,255,255,0.9); }
             .brand-column .brand-logo { width: 50px; height: 50px; }
             .brand-main-link { font-size: 1rem; margin: 8px 0; }
+            /* دسته‌بندی‌ها به‌صورت چیپِ لمسی — جمع‌وجورتر و خوش‌دست‌تر */
+            .sub-menu ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px; }
+            .sub-menu ul li a {
+                background: var(--surface-soft);
+                border: 1px solid var(--border);
+                padding: 6px 12px;
+                font-size: 0.85rem;
+                border-radius: var(--radius-pill);
+            }
+            .sub-menu ul li a:active { background: var(--pale-yellow); border-color: var(--gold-light); transform: none; }
 
             /* ===== بهبود اندازه کارت‌ها در موبایل ===== */
             .strip-container .card { width: 180px; min-width: 180px; max-width: 180px; contain-intrinsic-size: 180px 280px; }
@@ -1569,6 +1665,21 @@
             .contact-list { gap: 10px; }
             .contact-list li, .email-link-footer { font-size: 0.88rem; }
             .footer-bottom { margin-top: 24px; padding-top: 16px; }
+
+            /* ===== بهینه‌سازی سنگین‌ترین افکت‌ها برای موبایل (اسکرول/باتری/لود) ===== */
+            body { background-attachment: scroll; } /* fixed در موبایل repaint سنگین ایجاد می‌کنه */
+            body::before, body::after { animation: none; filter: blur(48px); }
+            .glass, .brand-description-box, .contact-card {
+                backdrop-filter: blur(10px) saturate(150%);
+                -webkit-backdrop-filter: blur(10px) saturate(150%);
+            }
+            .promo-card { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+            .site-footer, .footer-card { backdrop-filter: none; -webkit-backdrop-filter: none; }
+            .site-footer::after { animation: none; }
+            .logo { animation-duration: 14s; }
+            .category-header, .promo-section::before { animation-duration: 22s; }
+            /* فوتر تا وقتی نزدیک دید نشده رندر نشه */
+            .site-footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
         }
 
         @media (max-width: 600px) {
@@ -1669,6 +1780,35 @@
             animation: spin 3.5s linear infinite paused;
         }
         .btn-glow:hover::before { opacity: 1; animation-play-state: running; }
+
+        /* ============ دکمه بازگشت به بالا ============ */
+        .to-top {
+            position: fixed;
+            bottom: calc(22px + env(safe-area-inset-bottom));
+            inset-inline-end: 20px;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            color: var(--deep-purple);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            z-index: 990;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(14px) scale(0.9);
+            transition: opacity var(--dur-base) var(--ease-out),
+                        transform var(--dur-base) var(--ease-snap),
+                        visibility var(--dur-base),
+                        background var(--dur-fast) var(--ease-out),
+                        color var(--dur-fast) var(--ease-out);
+        }
+        .to-top.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .to-top:hover { background: var(--gradient-brand); color: #fff; box-shadow: var(--shadow-lg), var(--glow); }
+        .to-top:active { transform: scale(0.92); }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -1678,7 +1818,11 @@
             <a href="{% url 'home' %}" class="logo">
                 <img src="{% static 'brands/images/logo.png' %}" alt="BrandCenter" class="logo-img" fetchpriority="high" decoding="async">
             </a>
-            <button class="hamburger" id="hamburgerBtn" aria-label="منو">&#9776;</button>
+            <button class="hamburger" id="hamburgerBtn" aria-label="منو" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
             <nav class="main-nav" id="mainNav">
                 <ul>
@@ -1693,7 +1837,7 @@
                                 {% for brand in menu_brands %}
                                 <div class="brand-column">
                                     {% if brand.logo %}
-                                    <img src="{{ brand.logo.url }}" alt="{{ brand.name_en }}" class="brand-logo">
+                                    <img src="{{ brand.logo.url }}" alt="{{ brand.name_en }}" class="brand-logo" loading="lazy" decoding="async" width="64" height="64">
                                     {% endif %}
                                     <a href="{% url 'brand_detail' brand.id %}" class="brand-main-link">
                                         {% if LANG == 'fa' %}{{ brand.name_fa }}{% else %}{{ brand.name_en }}{% endif %}
@@ -1790,21 +1934,35 @@
         </div>
     </footer>
 
+    <button id="toTopBtn" class="to-top" aria-label="{% trans 'Back to top' %}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+    </button>
+
     <script>
-        // ===== Hamburger menu =====
+        // ===== Hamburger menu (قفل اسکرول بدنه + بستن با Escape + انیمیشن X) =====
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const mainNav = document.getElementById('mainNav');
-        function toggleMobileNav() {
-            mainNav.classList.toggle('active');
-            hamburgerBtn.setAttribute('aria-expanded', mainNav.classList.contains('active'));
+        const mobileMQ = window.matchMedia('(max-width: 900px)');
+        function setMobileNav(open) {
+            mainNav.classList.toggle('active', open);
+            hamburgerBtn.classList.toggle('is-open', open);
+            hamburgerBtn.setAttribute('aria-expanded', open);
+            // وقتی پنل بازه، اسکرول صفحه قفل میشه تا اسکرول داخل خودِ منو انجام بشه
+            document.body.classList.toggle('nav-locked', open && mobileMQ.matches);
+            if (!open) document.getElementById('megaTrigger').classList.remove('active');
         }
-        hamburgerBtn.addEventListener('click', toggleMobileNav);
-        mainNav.querySelectorAll('ul > li > a').forEach((link) => {
+        hamburgerBtn.addEventListener('click', () => setMobileNav(!mainNav.classList.contains('active')));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mainNav.classList.contains('active')) setMobileNav(false);
+        });
+        // اگر سایز به دسکتاپ برگشت، حالت موبایل کامل پاک بشه
+        const onMQChange = (e) => { if (!e.matches) setMobileNav(false); };
+        mobileMQ.addEventListener ? mobileMQ.addEventListener('change', onMQChange) : mobileMQ.addListener(onMQChange);
+        // بستن منو با کلیک روی لینک‌ها — به‌جز خودِ تریگر «برندها» تا آکاردئون باز بمونه
+        mainNav.querySelectorAll('a').forEach((link) => {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 900) {
-                    mainNav.classList.remove('active');
-                    hamburgerBtn.setAttribute('aria-expanded', 'false');
-                }
+                const isBrandTrigger = link.parentElement && link.parentElement.id === 'megaTrigger';
+                if (!isBrandTrigger && mobileMQ.matches) setMobileNav(false);
             });
         });
 
@@ -1845,6 +2003,26 @@
             }
         });
 
+        // ===== سایه هدر هنگام اسکرول + دکمه بازگشت به بالا (سبک، با rAF و passive) =====
+        (function() {
+            const header = document.querySelector('.site-header');
+            const toTopBtn = document.getElementById('toTopBtn');
+            let ticking = false;
+            function onScroll() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => {
+                    const y = window.scrollY || 0;
+                    if (header) header.classList.toggle('scrolled', y > 8);
+                    if (toTopBtn) toTopBtn.classList.toggle('show', y > 600);
+                    ticking = false;
+                });
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+            if (toTopBtn) toTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        })();
+
         // ===== Before/After slider =====
         document.querySelectorAll('.ba-slider').forEach(slider => {
             const after = slider.querySelector('.ba-after');
@@ -1880,7 +2058,8 @@
             let alreadyRevealed = new WeakSet();
             function applyReveal(el, index) {
                 el.classList.add('reveal-on-scroll');
-                const delay = Math.min(index, 15) * 800;
+                // استَگرِ کوتاه — قبلا تا ۱۲ ثانیه تاخیر ایجاد می‌کرد و حس کندیِ لود می‌داد
+                const delay = Math.min(index, 8) * 70;
                 el.style.transitionDelay = delay + 'ms';
             }
             function initialReveal() {
@@ -1902,11 +2081,11 @@
             else window.addEventListener('load', initialReveal);
 
             const io = new IntersectionObserver((entries) => {
+                let batch = 0; // استگر نسبت به آیتم‌های همین لحظه — نه ایندکس کل صفحه
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && !alreadyRevealed.has(entry.target)) {
                         const el = entry.target;
-                        const index = Array.prototype.indexOf.call(items, el);
-                        applyReveal(el, index);
+                        applyReveal(el, batch++);
                         requestAnimationFrame(() => {
                             requestAnimationFrame(() => { el.classList.add('in-view'); });
                         });
@@ -1933,8 +2112,8 @@
                 leftBtn.style.display = canScrollLeft ? 'flex' : 'none';
                 rightBtn.style.display = canScrollRight ? 'flex' : 'none';
             };
-            container.addEventListener('scroll', updateButtons);
-            window.addEventListener('resize', updateButtons);
+            container.addEventListener('scroll', updateButtons, { passive: true });
+            window.addEventListener('resize', updateButtons, { passive: true });
             updateButtons();
         });
 
@@ -2010,6 +2189,11 @@
                     }
                 }
                 if (slides.length > 1) startAutoPlay();
+                // توقف اتوپلی وقتی تب مخفیه — صرفه‌جویی CPU و باتری
+                document.addEventListener('visibilitychange', () => {
+                    clearTimeout(autoPlayTimer);
+                    if (!document.hidden && slides.length > 1 && !isTransitioning) startAutoPlay();
+                });
             });
         })();
 
