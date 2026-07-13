@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-for-local')
 
 # ۲. حالت Debug – در لوکال True (اگر متغیر محیطی نبود)، روی سرور False
-DEBUG = False
+DEBUG = True
 
 # ۳. هاست‌های مجاز – همیشه localhost را بپذیرد؛ اگر دامنه‌ای تنظیم شده باشد، آن را هم اضافه کند
 ALLOWED_HOSTS = [

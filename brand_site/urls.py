@@ -14,6 +14,8 @@ urlpatterns += i18n_patterns(
     path('', include('brands.urls')),
     path('catalog/', lambda request: redirect('/')),
     path('catalog', lambda request: redirect('/')),
+
+    
 )
 
 if settings.DEBUG:

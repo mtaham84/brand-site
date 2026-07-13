@@ -1,0 +1,173 @@
+{% extends 'brands/base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if LANG == 'fa' %}درباره ما{% else %}About Us{% endif %} | Rayka Shimi Saba
+{% endblock %}
+
+{% block content %}
+{% get_media_prefix as media_url %}
+
+<div class="container-fluid">
+
+  <h1 class="page-title">
+    {% if LANG == 'fa' %}درباره ما{% else %}About Us{% endif %}
+  </h1>
+
+  {# متن معرفی #}
+  <section class="brand-description-wrapper">
+    <div class="brand-description-box glass-ring">
+      <p class="brand-desc-text typewriter">
+        {% if LANG == 'fa' %}
+          رایکا شیمی صبا؛ جایی که دانش فنی، نوآوری و تعهد در صنعت سلامت و زیبایی به یکدیگر می‌رسند.
+          ما در رایکا شیمی صبا، فراتر از تولید و توزیع کالا، «خلق ارزش» می‌کنیم. مسیر ما، از دلِ نیازهای واقعی بازار ایران و با هدف ارتقای استانداردهای مراقبت شخصی آغاز شده است. ما معتقدیم هر محصولی که نام ما را بر خود دارد، باید فراتر از یک کالا، حامل حسی از اطمینان و کیفیت باشد.
+          این مجموعه با شناسه ملی ۱۴۰۰۸۰۵۴۵۰۰ و شماره ثبت ۵۸۲۷۶۰، در قلب تپنده‌ی صنعت ایران (اصفهان) تأسیس شده و با تکیه بر زیرساخت‌های تخصصی، در حوزه‌ی تولید، واردات، صادرات و پخش محصولات آرایشی، بهداشتی، سلولزی و غذایی فعالیت می‌کند.
+        {% else %}
+          Rayka Shimi Saba is where technical expertise, innovation, and unwavering commitment meet in the health and beauty industry.
+          At Rayka Shimi Saba, we do more than just produce and distribute goods; we create value. Our journey is rooted in the real-world needs of the Iranian market, driven by the goal of elevating personal care standards. We believe that every product bearing our name must be more than a commodity—it must carry a sense of reliability, quality, and trust.
+          Registered in Isfahan, Iran (Registration No. 582760, National ID: 14008054500), our company operates on a foundation of specialized infrastructure, engaging in the production, import, export, and distribution of cosmetics, hygiene, cellulose, and food products.
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  {# ستون‌های برندینگ #}
+  <section style="margin-top: 48px;">
+    <h2 class="related-title" style="margin-bottom: 28px;">
+      {% if LANG == 'fa' %}ستون‌های برندینگ ما{% else %}Our Pillars of Branding{% endif %}
+    </h2>
+    <div class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px;">
+      
+      <div class="card" style="padding: 24px; text-align: center;">
+        <h3 style="color: var(--deep-purple); font-weight: 800; margin-bottom: 12px;">Archilo</h3>
+        <p class="typewriter" style="font-size: 0.95rem; color: var(--text-soft); line-height: 1.7;">
+          {% if LANG == 'fa' %}
+            برندِ تخصصی ما در حوزه‌ی مراقبت از پوست و مو. آرچیلو حاصلِ ترکیب دانش فنی و مواد اولیه‌ی باکیفیت است؛ برندی که برای مخاطبی طراحی شده که به جزئیات، ترکیبات و اثربخشی محصول اهمیت می‌دهد.
+          {% else %}
+            Our premium brand dedicated to professional skincare and haircare. Archilo is the result of combining technical expertise with high-quality ingredients. It is designed for consumers who value precision, advanced formulations, and proven efficacy.
+          {% endif %}
+        </p>
+        <img src="{{ media_url }}brands/logos/archilo.jpg"
+             alt="Archilo logo"
+             style="width: 80px; height: 80px; object-fit: contain; margin: 20px auto 0; border-radius: 50%; background: white; padding: 6px; box-shadow: var(--shadow-sm);"
+             loading="lazy"
+             onerror="this.onerror=null; this.src='{% static 'brands/images/placeholder.png' %}';">
+      </div>
+
+      <div class="card" style="padding: 24px; text-align: center;">
+        <h3 style="color: var(--deep-purple); font-weight: 800; margin-bottom: 12px;">Eylavel</h3>
+        <p class="typewriter" style="font-size: 0.95rem; color: var(--text-soft); line-height: 1.7;">
+          {% if LANG == 'fa' %}
+            پاسخِ ما به نیازهای روزمره‌ی مراقبتی. ایلاول با تمرکز بر تنوع و کاربردی بودن، تلاش کرده است استانداردهای مراقبت شخصی را در سبد مصرف‌کننده‌ی ایرانی ارتقا دهد.
+          {% else %}
+            Our answer to daily care needs. Focusing on versatility and practicality, Eylavel strives to enhance personal care standards for a wide range of consumers.
+          {% endif %}
+        </p>
+        <img src="{{ media_url }}brands/logos/eylavel.jpg"
+             alt="Eylavel logo"
+             style="width: 80px; height: 80px; object-fit: contain; margin: 20px auto 0; border-radius: 50%; background: white; padding: 6px; box-shadow: var(--shadow-sm);"
+             loading="lazy"
+             onerror="this.onerror=null; this.src='{% static 'brands/images/placeholder.png' %}';">
+      </div>
+
+      <div class="card" style="padding: 24px; text-align: center;">
+        <h3 style="color: var(--deep-purple); font-weight: 800; margin-bottom: 12px;">Nicol</h3>
+        <p class="typewriter" style="font-size: 0.95rem; color: var(--text-soft); line-height: 1.7;">
+          {% if LANG == 'fa' %}
+            ما با افتخار در سبد محصولات بازار، نام نیکول را نیز در کنار سایر محصولاتِ معتبرِ خود عرضه می‌کنیم؛ برندی که با هدف تکمیلِ تجربه‌ی مراقبت از پوست و مو و پاسخگویی به نیازهای متنوع مشتریان، در چرخه‌ی توزیع حرفه‌ای ما جایگاه ویژه‌ای دارد.
+          {% else %}
+            A significant part of our commercial ecosystem. We are proud to feature Nicole within our professional distribution network, ensuring it meets the diverse care requirements of our customers.
+          {% endif %}
+        </p>
+        <img src="{{ media_url }}brands/logos/nicol.jpg"
+             alt="Nicol logo"
+             style="width: 80px; height: 80px; object-fit: contain; margin: 20px auto 0; border-radius: 50%; background: white; padding: 6px; box-shadow: var(--shadow-sm);"
+             loading="lazy"
+             onerror="this.onerror=null; this.src='{% static 'brands/images/placeholder.png' %}';">
+      </div>
+    </div>
+  </section>
+
+  {# فلسفه #}
+  <section style="margin-top: 56px;">
+    <div class="brand-description-box glass-ring" style="margin-bottom: 32px;">
+      <h2 style="color: var(--deep-purple); font-weight: 800; margin-bottom: 14px;">
+        {% if LANG == 'fa' %}فلسفه‌ی وجودی: فراتر از محصول{% else %}Our Philosophy: Beyond the Product{% endif %}
+      </h2>
+      <p class="brand-desc-text typewriter" style="font-size: 1rem;">
+        {% if LANG == 'fa' %}
+          ما در رایکا شیمی صبا به «تولید انبوه» باور نداریم؛ ما به «تولیدِ مسئولانه» باور داریم. فرآیند توسعه‌ی محصول در مجموعه‌ی ما از انتخاب دقیق مواد اولیه آغاز شده، با فرمولاسیون‌های دقیق ادامه می‌یابد و تا لحظه‌ی رسیدن به دست مصرف‌کننده، با نظارت سخت‌گیرانه همراه است.
+        {% else %}
+          At Rayka Shimi Saba, we do not believe in mass production—we believe in “responsible production.” Our product development process begins with the rigorous selection of raw materials, continues with precise formulation, and is accompanied by strict oversight until the moment the product reaches the consumer’s hands.
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  {# ارزش‌ها #}
+  <section style="margin-top: 40px;">
+    <h2 class="related-title" style="margin-bottom: 24px;">
+      {% if LANG == 'fa' %}ارزش‌های بنیادین ما{% else %}Our Core Values{% endif %}
+    </h2>
+    <div class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;">
+      
+      {% if LANG == 'fa' %}
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">کیفیت بدون سازش: هر محصول، سفیرِ کیفیتِ ماست.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">نوآوری مستمر: بازار همواره در حال تغییر است و ما با آن رشد می‌کنیم.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">شفافیت: ما به رابطه‌ای صادقانه با مصرف‌کننده، توزیع‌کننده و همراهانمان اعتقاد داریم.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">مسئولیت‌پذیری: سلامتِ جامعه‌ی مصرف‌کننده، اولویتِ اولِ تمامی تصمیماتِ مدیریتی ماست.</p>
+        </div>
+      {% else %}
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">Uncompromising Quality: Every product is an ambassador of our standards.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">Continuous Innovation: We grow alongside the evolving demands of the market.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">Transparency: We believe in honest relationships with our consumers, distributors, and partners.</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <p style="font-weight: 600; color: var(--deep-purple); margin: 0;">Responsibility: The health and well-being of our community is the priority behind every management decision.</p>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  {# چشم‌انداز #}
+  <section style="margin-top: 48px;">
+    <div class="brand-description-box glass-ring" style="margin-bottom: 10px;">
+      <h2 style="color: var(--deep-purple); font-weight: 800; margin-bottom: 14px;">
+        {% if LANG == 'fa' %}چشم‌انداز آینده{% else %}Our Vision{% endif %}
+      </h2>
+      <p class="brand-desc-text typewriter" style="font-size: 1rem;">
+        {% if LANG == 'fa' %}
+          ما به دنبال چیزی فراتر از جایگاه فعلی هستیم. رایکا شیمی صبا در حال ترسیم نقشه‌ی راهی است که در آن، محصولات ایرانی نه تنها در بازارهای داخلی، بلکه در عرصه‌ی بین‌المللی نیز به عنوان نمادی از کیفیت و استانداردهای روز دنیا شناخته شوند.
+        {% else %}
+          We look beyond our current position. Rayka Shimi Saba is actively mapping a future where Iranian products are recognized not only in domestic markets but also internationally as symbols of quality and world-class standards.
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  {# شعار پایانی #}
+  <div style="text-align: center; margin: 56px 0 32px;">
+    <p class="typewriter" style="font-size: 1.2rem; font-weight: 700; color: var(--deep-purple);">
+      {% if LANG == 'fa' %}
+        رایکا شیمی صبا؛ تعهد ما به زیبایی، تضمینِ اعتمادِ شماست.
+      {% else %}
+        Rayka Shimi Saba; Our commitment to beauty is the guarantee of your trust.
+      {% endif %}
+    </p>
+  </div>
+
+</div>
+{% endblock %}

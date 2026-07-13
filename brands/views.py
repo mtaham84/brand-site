@@ -137,3 +137,8 @@ def catalog_download(request, pdf_id):
         return FileResponse(pdf.pdf_file, as_attachment=True)
     except FileNotFoundError:
         raise Http404("File not found")
+    
+from django.shortcuts import render
+
+def about(request):
+    return render(request, 'about.html')
